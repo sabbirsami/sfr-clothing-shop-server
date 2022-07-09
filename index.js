@@ -17,10 +17,17 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
-        const productCollection = client.db("SRFstore").collection("products");
+        const productCollection = client.db("SFRstore").collection("products");
+        console.log("connected");
+
+        app.get("/products", async (req, res) => {
+            const result = await productCollection.find().toArray();
+            res.send(result);
+        });
     } finally {
     }
 }
+run().catch(console.dir);
 
 app.get("/", (req, res) => {
     res.send("SFR store");
