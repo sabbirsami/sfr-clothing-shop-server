@@ -38,6 +38,10 @@ async function run() {
             const result = await orderCollection.insertOne(order);
             res.send(result);
         });
+        app.get("/orders", async (req, res) => {
+            const result = await orderCollection.find().toArray();
+            res.send(result);
+        });
     } finally {
     }
 }
