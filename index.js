@@ -18,18 +18,24 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db("SFRstore").collection("products");
+        const orderCollection = client.db("SFRstore").collection("orders");
         console.log("connected");
 
         app.get("/products", async (req, res) => {
             const result = await productCollection.find().toArray();
             res.send(result);
         });
-
         app.get("/products/:id", async (req, res) => {
             const id = req.params.id;
             const result = await productCollection
                 .find({ _id: ObjectId(id) })
                 .toArray();
+            res.send(result);
+        });
+
+        app.post("/orders", async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
             res.send(result);
         });
     } finally {
