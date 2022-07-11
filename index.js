@@ -51,8 +51,14 @@ async function run() {
 
         app.get("/orders/:id", async (req, res) => {
             const id = req.params.id;
-            const order = await orderCollection.find({ id: id }).toArray();
-            res.send(order);
+            const orders = await orderCollection.find({ id: id }).toArray();
+            let newQuantity = 0;
+            {
+                orders.forEach(
+                    (order) => (newQuantity = newQuantity + order.quantity)
+                );
+            }
+            res.send(orders);
         });
     } finally {
     }
