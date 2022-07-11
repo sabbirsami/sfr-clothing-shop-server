@@ -51,11 +51,7 @@ async function run() {
 
         app.get("/orders/:id", async (req, res) => {
             const id = req.params.id;
-            console.log(id);
-            const order = await orderCollection
-                .find({ _id: ObjectId(id) })
-                .toArray();
-            console.log(order);
+            const order = await orderCollection.find({ id: id }).toArray();
             res.send(order);
         });
     } finally {
