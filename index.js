@@ -48,6 +48,16 @@ async function run() {
             const result = await orderCollection.deleteOne(query);
             res.send(result);
         });
+
+        app.get("/orders/:id", async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const order = await orderCollection
+                .find({ _id: ObjectId(id) })
+                .toArray();
+            console.log(order);
+            res.send(order);
+        });
     } finally {
     }
 }
