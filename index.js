@@ -65,7 +65,15 @@ async function run() {
             const orders = await orderCollection
                 .find({ email: email })
                 .toArray();
-            res.send(orders);
+            const count = orders.length;
+            let totalFinal = 0;
+            {
+                orders.forEach(
+                    (order) => (totalFinal = order.total + totalFinal)
+                );
+            }
+            console.log(totalFinal);
+            res.send({ orders, count, totalFinal });
         });
     } finally {
     }
