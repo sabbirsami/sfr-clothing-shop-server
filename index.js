@@ -62,7 +62,9 @@ async function run() {
         // });
         app.get("/orders/:email", async (req, res) => {
             const email = req.params.email;
-            const orders = await orderCollection.findOne({ email: email });
+            const orders = await orderCollection
+                .find({ email: email })
+                .toArray();
             res.send(orders);
         });
     } finally {
