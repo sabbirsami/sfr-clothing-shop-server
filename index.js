@@ -49,15 +49,20 @@ async function run() {
             res.send(result);
         });
 
-        app.get("/orders/:id", async (req, res) => {
-            const id = req.params.id;
-            const orders = await orderCollection.find({ id: id }).toArray();
-            let newQuantity = 0;
-            {
-                orders.forEach(
-                    (order) => (newQuantity = newQuantity + order.quantity)
-                );
-            }
+        // app.get("/orders/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const orders = await orderCollection.find({ id: id }).toArray();
+        //     let newQuantity = 0;
+        //     {
+        //         orders.forEach(
+        //             (order) => (newQuantity = newQuantity + order.quantity)
+        //         );
+        //     }
+        //     res.send({ orders });
+        // });
+        app.get("/orders/:email", async (req, res) => {
+            const email = req.params.email;
+            const orders = await orderCollection.findOne({ email: email });
             res.send(orders);
         });
     } finally {
