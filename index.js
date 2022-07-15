@@ -32,6 +32,12 @@ async function run() {
                 .toArray();
             res.send(result);
         });
+        app.delete("/products/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productCollection.deleteOne(query);
+            res.send(result);
+        });
 
         app.post("/orders", async (req, res) => {
             const order = req.body;
@@ -60,6 +66,14 @@ async function run() {
         //     }
         //     res.send({ orders });
         // });
+        app.get("/allProducts/:category", async (req, res) => {
+            const category = req.params.category;
+            console.log(category);
+            const products = await productCollection
+                .find({ category: category })
+                .toArray();
+            res.send(products);
+        });
         app.get("/orders/:email", async (req, res) => {
             const email = req.params.email;
             const orders = await orderCollection
