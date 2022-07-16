@@ -22,8 +22,19 @@ async function run() {
         console.log("connected");
 
         app.get("/products", async (req, res) => {
-            const result = await productCollection.find().toArray();
+            const query = {};
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            const cursor = productCollection.find(query);
+            const result = await cursor
+                .skip(page * size)
+                .limit(size)
+                .toArray();
             res.send(result);
+        });
+        app.get("/productCount", async (req, res) => {
+            const count = await productCollection.countDocuments();
+            res.send({ count });
         });
         app.get("/products/:id", async (req, res) => {
             const id = req.params.id;
