@@ -50,9 +50,36 @@ async function run() {
             res.send(result);
         });
 
-        app.post("/orders", async (req, res) => {
+        app.put("/orders", async (req, res) => {
             const order = req.body;
-            const result = await orderCollection.insertOne(order);
+            console.log(order);
+            const newQuantity = req.body.quantity;
+
+            const id = order.id;
+            const query = { id: id };
+            let quantity = order.quantity;
+            const item = await orderCollection.findOne(query);
+            if (item) {
+                quantity = item.quantity + newQuantity;
+            }
+            // const updateId = orderCollection.find((item) => item.id == id);
+            // const updateItem = item.update;
+
+            const result = await orderCollection.updateOne(
+                { id: id },
+                {
+                    $set: {
+                        quantity: quantity,
+                        id: order.id,
+                        email: order.email,
+                        name: order.name,
+                        price: order.price,
+                        total: order.total,
+                        image: order.image,
+                    },
+                },
+                { upsert: true }
+            );
             res.send(result);
         });
         app.get("/orders", async (req, res) => {
@@ -79,7 +106,6 @@ async function run() {
         // });
         app.get("/allProducts/:category", async (req, res) => {
             const category = req.params.category;
-            console.log(category);
             const products = await productCollection
                 .find({ category: category })
                 .toArray();
@@ -97,7 +123,6 @@ async function run() {
                     (order) => (totalFinal = order.total + totalFinal)
                 );
             }
-            console.log(totalFinal);
             res.send({ orders, count, totalFinal });
         });
     } finally {
