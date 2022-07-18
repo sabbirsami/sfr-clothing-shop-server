@@ -93,17 +93,6 @@ async function run() {
             res.send(result);
         });
 
-        // app.get("/orders/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const orders = await orderCollection.find({ id: id }).toArray();
-        //     let newQuantity = 0;
-        //     {
-        //         orders.forEach(
-        //             (order) => (newQuantity = newQuantity + order.quantity)
-        //         );
-        //     }
-        //     res.send({ orders });
-        // });
         app.get("/allProducts/:category", async (req, res) => {
             const category = req.params.category;
             const products = await productCollection
@@ -116,6 +105,7 @@ async function run() {
             const orders = await orderCollection
                 .find({ email: email })
                 .toArray();
+
             const count = orders.length;
             let totalFinal = 0;
             {
@@ -123,6 +113,7 @@ async function run() {
                     (order) => (totalFinal = order.total + totalFinal)
                 );
             }
+            console.log(totalFinal);
             res.send({ orders, count, totalFinal });
         });
     } finally {
