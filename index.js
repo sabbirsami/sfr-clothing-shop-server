@@ -67,9 +67,6 @@ async function run() {
             if (item) {
                 quantity = item.quantity + newQuantity;
             }
-            // const updateId = orderCollection.find((item) => item.id == id);
-            // const updateItem = item.update;
-
             const result = await orderCollection.updateOne(
                 { id: id },
                 {
