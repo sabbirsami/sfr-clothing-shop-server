@@ -129,6 +129,7 @@ async function run() {
                     (order) => (totalFinal = order.total + totalFinal)
                 );
             }
+            console.log(orders);
             console.log(totalFinal);
             res.send({ orders, count, totalFinal });
         });
