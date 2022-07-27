@@ -62,7 +62,7 @@ async function run() {
         app.put("/products/:id", async (req, res) => {
             const id = req.params.id;
             const product = req.body;
-            const result = await testCollection.updateOne(
+            const result = await productCollection.updateOne(
                 { _id: ObjectId(id) },
                 {
                     $set: product,
