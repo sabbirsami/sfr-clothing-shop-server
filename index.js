@@ -59,6 +59,18 @@ async function run() {
                 .toArray();
             res.send(result);
         });
+        app.put("/products/:id", async (req, res) => {
+            const id = req.params.id;
+            const product = req.body;
+            const result = await testCollection.updateOne(
+                { _id: ObjectId(id) },
+                {
+                    $set: product,
+                },
+                { upsert: true }
+            );
+            res.send({ result });
+        });
         app.post("/products", async (req, res) => {
             const product = req.body;
             const result = await productCollection.insertOne(product);
@@ -129,8 +141,6 @@ async function run() {
                     (order) => (totalFinal = order.total + totalFinal)
                 );
             }
-            console.log(orders);
-            console.log(totalFinal);
             res.send({ orders, count, totalFinal });
         });
     } finally {
