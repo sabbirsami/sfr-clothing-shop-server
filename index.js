@@ -116,7 +116,7 @@ async function run() {
             res.send(result);
         });
         app.get("/ordersCount", async (req, res) => {
-            const result = await orderCollection.countDocuments();
+            const count = await orderCollection.countDocuments();
             res.send({ count });
         });
         app.delete("/orders/:id", async (req, res) => {
