@@ -21,6 +21,7 @@ async function run() {
         await client.connect();
         const productCollection = client.db("SFRstore").collection("products");
         const orderCollection = client.db("SFRstore").collection("orders");
+        const userCollection = client.db("SFRstore").collection("users");
         console.log("connected");
 
         app.post("/create-payment-intent", async (req, res) => {
@@ -36,6 +37,22 @@ async function run() {
             res.send({
                 clientSecret: paymentIntent.client_secret,
             });
+        });
+
+        app.put("/user/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(
+                filter,
+                updateDoc,
+                options
+            );
+            res.send(result);
         });
 
         app.get("/products", async (req, res) => {
