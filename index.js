@@ -52,7 +52,14 @@ async function run() {
                 updateDoc,
                 options
             );
-            res.send(result);
+            const token = jwt.sign(
+                { email: email },
+                process.env.ACCESS_TOKEN_SECRET,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            res.send({ result, token });
         });
 
         app.get("/products", async (req, res) => {
@@ -151,6 +158,8 @@ async function run() {
             res.send(products);
         });
         app.get("/orders/:email", async (req, res) => {
+            const authorization = req.headers.authorization;
+            console.log(authorization);
             const email = req.params.email;
             const orders = await orderCollection
                 .find({ email: email })
